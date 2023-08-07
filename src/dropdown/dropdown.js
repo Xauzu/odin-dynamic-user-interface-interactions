@@ -20,7 +20,6 @@ dropdownItem.prototype.setLink = function setLink(link, openInNewTab) {
 
 function createItem(type, menuItem, classlist, index, visible) {
   const item = document.createElement(type);
-  console.log(menuItem);
   if (menuItem instanceof dropdownItem) {
     if (menuItem.text) item.textContent = menuItem.text;
     if (menuItem.callback)
@@ -32,13 +31,14 @@ function createItem(type, menuItem, classlist, index, visible) {
   }
   if (classlist) item.classList.add(classlist);
   if (index !== undefined) item.setAttribute('data-id', index);
-  if (visible === false) item.style = 'opacity: 0';
+  if (visible === false) item.style.opacity = '0';
 
   return item;
 }
 
-dropdown.prototype.createElement = function createElement() {
+dropdown.prototype.createElement = function createElement(disableStyle, disableTransition) {
   const dropDownElement = createItem('div', null, 'drop-down');
+  if (disableStyle !== true)
   dropDownElement.setAttribute(
     'style',
     'display: grid; grid-template: 1fr / auto;',
@@ -55,6 +55,8 @@ dropdown.prototype.createElement = function createElement() {
       i,
       false,
     );
+
+	if (disableTransition !== true) dropDownItem.style.transition = `opacity ${(i)*0.1}s`;
     dropDownElement.appendChild(dropDownItem);
   }
 

@@ -7,7 +7,7 @@ const test = () => {
 
     dDown.addItem(new DropDownItem('test', ()=>{window.open('https://github.com', '_self')}))
 
-    document.querySelector('#content').appendChild(dDown.createElement());
+    document.querySelector('#content').appendChild(dDown.createElement(false, true));
 };
 
 test();

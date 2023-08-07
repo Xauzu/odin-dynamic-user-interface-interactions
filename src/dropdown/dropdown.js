@@ -36,13 +36,16 @@ function createItem(type, menuItem, classlist, index, visible) {
   return item;
 }
 
-dropdown.prototype.createElement = function createElement(disableStyle, disableTransition) {
+dropdown.prototype.createElement = function createElement(
+  disableStyle,
+  disableTransition,
+) {
   const dropDownElement = createItem('div', null, 'drop-down');
   if (disableStyle !== true)
-  dropDownElement.setAttribute(
-    'style',
-    'display: grid; grid-template: 1fr / auto;',
-  );
+    dropDownElement.setAttribute(
+      'style',
+      'display: grid; grid-template: 1fr / auto;',
+    );
 
   const menuDisplayItem = createItem('button', this.title, `drop-down-display`);
   dropDownElement.appendChild(menuDisplayItem);
@@ -56,7 +59,8 @@ dropdown.prototype.createElement = function createElement(disableStyle, disableT
       false,
     );
 
-	if (disableTransition !== true) dropDownItem.style.transition = `opacity ${(i)*0.1}s`;
+    if (disableTransition !== true)
+      dropDownItem.style.transition = `opacity ${i * 0.1}s`;
     dropDownElement.appendChild(dropDownItem);
   }
 

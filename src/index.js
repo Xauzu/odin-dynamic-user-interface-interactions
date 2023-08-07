@@ -16,6 +16,9 @@ const test = () => {
 
     const dDown2 = new DropDown('mobile-menu', new DropDownItem('test', ()=> {window.open('https://google.com', '_self')}), testItem, 'test3');
     content.appendChild(dDown2.createElement(false, false));
+
+    // Scale apply on dropdown object
+    // font size, padding, and others apply on [class^="<name of dropdown>-item"]
 };
 
 test();

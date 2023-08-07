@@ -63,9 +63,8 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 		if (disableStyle !== true) {
 			dropDownItem.style.position = 'absolute';
 			dropDownItem.style.width = '100%';
-			dropDownItem.style.transform = `translate(0, ${(i + 1)*100}%)`;
+			dropDownItem.style.transform = `translateY(${(i + 1)*100}%)`;
 			dropDownItem.style.zIndex = '10';
-            dropDownItem.style.opacity = '0';
             dropDownItem.style.display = 'none';
 		}
 

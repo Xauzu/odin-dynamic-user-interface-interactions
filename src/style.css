@@ -2,6 +2,13 @@
     font-size: xx-large;
 }
 
+.mobile-menu {
+    transform: scale(0.5);
+}
+
 [class^="mobile-menu-item"] {
     font-size: 72px;
+    padding: 4rem;
+    border-radius: 5rem;
+    border: 10px solid black;
 }

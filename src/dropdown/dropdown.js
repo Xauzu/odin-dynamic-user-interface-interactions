@@ -65,7 +65,11 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 			dropDownItem.style.width = '100%';
 			dropDownItem.style.top = `${(i + 1) * 100}%`;
 			dropDownItem.style.zIndex = '10';
+            dropDownItem.style.opacity = '0';
+            dropDownItem.style.display = 'none';
 		}
+
+		dropDownElement.appendChild(dropDownItem);
 	}
 
 	menuDisplayItem.addEventListener('mouseenter', () => {

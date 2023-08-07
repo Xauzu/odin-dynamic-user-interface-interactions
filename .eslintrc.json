@@ -11,6 +11,8 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
+    "ignorePatterns": ["dist/*.js"],
     "rules": {
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }]
     }
 }

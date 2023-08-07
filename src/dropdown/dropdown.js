@@ -1,24 +1,43 @@
-export default function dropDown(title, ...args) {
+export function dropdown(title, ...args) {
     this.title = title;
 	this.items = [];
 	args.forEach((a) => {
 		this.items.push(a);
 	});
+};
+
+export function dropdownItem(text, callback) {
+	this.text = text;
+	this.callback = callback;
+};
+
+dropdownItem.prototype.setLink = function setLink(link, openInNewTab) {
+	this.callback = () => {
+		if (openInNewTab)
+			window.open(link);
+		else
+			window.open(link, '_self');
+	}
 }
 
-function createItem(type, text, classlist, index, visible) {
+function createItem(type, menuItem, classlist, index, visible) {
 	const item = document.createElement(type);
-	if (text) item.textContent = text;
-	if (classlist && classlist instanceof Array)
-		item.classList.add(...classlist);
-	else item.classList.add(classlist);
-	if (index !== undefined) item.classList.add(`menu-${index}`);
+	console.log(menuItem);
+	if (menuItem instanceof dropdownItem) {
+		if (menuItem.text) item.textContent = menuItem.text;
+		if (menuItem.callback) item.addEventListener('click', () => {menuItem.callback()});
+	}
+	else {
+		item.textContent = menuItem;
+	}
+	if (classlist) item.classList.add(classlist);
+	if (index !== undefined) item.setAttribute('data-id', index);
 	if (visible === false) item.style = "opacity: 0";
 
 	return item;
 }
 
-dropDown.prototype.createElement = function createElement() {
+dropdown.prototype.createElement = function createElement() {
 	const dropDownElement = createItem("div", null, "drop-down");
 	dropDownElement.setAttribute(
 		"style",
@@ -31,8 +50,8 @@ dropDown.prototype.createElement = function createElement() {
 	for (let i = 0; i < this.items.length; i++) {
 		const dropDownItem = createItem(
 			"button",
-			`${this.items[i]}`,
-			`drop-down-item-${this.items[i]}`,
+			this.items[i],
+			`${this.title}-item-${this.items[i].text || this.items[i]}`,
 			i,
 			false
 		);
@@ -58,16 +77,16 @@ dropDown.prototype.createElement = function createElement() {
 	return dropDownElement;
 };
 
-dropDown.prototype.getItems = function getItems() {
+dropdown.prototype.getItems = function getItems() {
 	return this.items;
 };
-dropDown.prototype.addItem = function addItem(item) {
+dropdown.prototype.addItem = function addItem(item) {
 	this.items.push(item);
 };
-dropDown.prototype.removeItem = function removeItem(index) {
+dropdown.prototype.removeItem = function removeItem(index) {
 	this.items.splice(index, 1);
 };
 
-dropDown.prototype.getCurrentIndex = function getCurrentIndex() {
+dropdown.prototype.getCurrentIndex = function getCurrentIndex() {
 	return this.index;
 };

@@ -1,10 +1,13 @@
-import DropDown from "./dropdown/DropDown";
+import {dropdown as DropDown, dropdownItem as DropDownItem} from "./dropdown/dropdown";
 
 const test = () => {
-    const dDown = new DropDown('menu', 'test', 'test2', 'test3');
-    const menu = dDown.createElement();
+    const testItem = new DropDownItem('test2');
+    testItem.setLink('https://reddit.com');
+    const dDown = new DropDown('menu', new DropDownItem('test', ()=> {window.open('https://google.com', '_self')}), testItem, 'test3');
 
-    document.querySelector('#content').appendChild(menu);
+    dDown.addItem(new DropDownItem('test', ()=>{window.open('https://github.com', '_self')}))
+
+    document.querySelector('#content').appendChild(dDown.createElement());
 };
 
 test();

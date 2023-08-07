@@ -1,0 +1,7 @@
+.mobile-menu, .mobile-menu-display {
+    font-size: xx-large;
+}
+
+[class^="mobile-menu-item"] {
+    font-size: 72px;
+}

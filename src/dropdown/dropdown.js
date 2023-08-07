@@ -37,7 +37,7 @@ function createItem(type, menuItem, classlist, index, visible) {
 }
 
 dropdown.prototype.createElement = function createElement(disableStyle) {
-	const dropDownElement = createItem('div', null, 'drop-down');
+	const dropDownElement = createItem('div', null, `${this.title}`);
 	if (disableStyle !== true) {
 		dropDownElement.style.position = 'relative';
 		dropDownElement.style.display = 'grid';
@@ -47,7 +47,7 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 	const menuDisplayItem = createItem(
 		'button',
 		this.title,
-		`drop-down-display`,
+		`${this.title}-item-display`,
 	);
 	dropDownElement.appendChild(menuDisplayItem);
 
@@ -63,7 +63,7 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 		if (disableStyle !== true) {
 			dropDownItem.style.position = 'absolute';
 			dropDownItem.style.width = '100%';
-			dropDownItem.style.top = `${(i + 1) * 100}%`;
+			dropDownItem.style.transform = `translate(0, ${(i + 1)*100}%)`;
 			dropDownItem.style.zIndex = '10';
             dropDownItem.style.opacity = '0';
             dropDownItem.style.display = 'none';
@@ -74,7 +74,7 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 
 	menuDisplayItem.addEventListener('mouseenter', () => {
 		dropDownElement.childNodes.forEach((node) => {
-			if (!node.classList.contains('drop-down-display')) {
+			if (!node.classList.contains(`${this.title}-item-display`)) {
 				// eslint-disable-next-line no-param-reassign
 				node.style.opacity = '1';
 				// eslint-disable-next-line no-param-reassign
@@ -84,7 +84,7 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 	});
 	dropDownElement.addEventListener('mouseleave', () => {
 		dropDownElement.childNodes.forEach((node) => {
-			if (!node.classList.contains('drop-down-display')) {
+			if (!node.classList.contains(`${this.title}-item-display`)) {
 				// eslint-disable-next-line no-param-reassign
 				node.style.opacity = '0';
 				// eslint-disable-next-line no-param-reassign

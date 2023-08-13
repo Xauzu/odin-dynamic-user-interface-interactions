@@ -1,3 +1,4 @@
+// Dropdown menu object
 export function dropdown(title, ...args) {
 	this.title = title;
 	this.items = [];
@@ -6,11 +7,13 @@ export function dropdown(title, ...args) {
 	});
 }
 
+// Dropdown item object
 export function dropdownItem(text, callback) {
 	this.text = text;
 	this.callback = callback;
 }
 
+// Hyperlink on click
 dropdownItem.prototype.setLink = function setLink(link, openInNewTab) {
 	this.callback = () => {
 		if (openInNewTab) window.open(link);
@@ -18,8 +21,11 @@ dropdownItem.prototype.setLink = function setLink(link, openInNewTab) {
 	};
 };
 
+// Create a dom element for the dropdown item using the data from the object
 function createItem(type, menuItem, classlist, index, visible) {
 	const item = document.createElement(type);
+
+	// Determine based on if a dropdownitem or string was used
 	if (menuItem instanceof dropdownItem) {
 		if (menuItem.text) item.textContent = menuItem.text;
 		if (menuItem.callback)
@@ -36,6 +42,7 @@ function createItem(type, menuItem, classlist, index, visible) {
 	return item;
 }
 
+// Create a dom element for the menu
 dropdown.prototype.createElement = function createElement(disableStyle) {
 	const dropDownElement = createItem('div', null, `${this.title}`);
 	if (disableStyle !== true) {
@@ -44,6 +51,7 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 		dropDownElement.style.gridTemplate = '1fr / auto';
 	}
 
+	// Default display when inactive
 	const menuDisplayItem = createItem(
 		'button',
 		this.title,
@@ -51,6 +59,7 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 	);
 	dropDownElement.appendChild(menuDisplayItem);
 
+	
 	for (let i = 0; i < this.items.length; i++) {
 		const dropDownItem = createItem(
 			'button',
@@ -60,6 +69,7 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 			false,
 		);
 
+		// Styling to create a dropdown
 		if (disableStyle !== true) {
 			dropDownItem.style.position = 'absolute';
 			dropDownItem.style.width = '100%';
@@ -71,6 +81,7 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 		dropDownElement.appendChild(dropDownItem);
 	}
 
+	// Displaying and hiding of the dropdown menu
 	menuDisplayItem.addEventListener('mouseenter', () => {
 		dropDownElement.childNodes.forEach((node) => {
 			if (!node.classList.contains(`${this.title}-item-display`)) {
@@ -95,6 +106,7 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 	return dropDownElement;
 };
 
+// Accessor and mutators
 dropdown.prototype.getItems = function getItems() {
 	return this.items;
 };

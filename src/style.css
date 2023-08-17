@@ -1,9 +1,9 @@
-.mobile-menu, .mobile-menu-display {
-    font-size: xx-large;
+#content > div {
+    padding: 10vw;
 }
 
-.mobile-menu {
-    transform: scale(0.5);
+.mobile-menu, .mobile-menu-display {
+    font-size: xx-large;
 }
 
 [class^="mobile-menu-item"] {

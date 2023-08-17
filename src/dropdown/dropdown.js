@@ -66,14 +66,12 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 			this.items[i],
 			`${this.title}-item-${this.items[i].text || this.items[i]}`,
 			i,
-			false,
+			false
 		);
 
 		// Styling to create a dropdown
 		if (disableStyle !== true) {
 			dropDownItem.style.position = 'absolute';
-			dropDownItem.style.width = '100%';
-			dropDownItem.style.transform = `translateY(${(i + 1)*100}%)`;
 			dropDownItem.style.zIndex = '10';
             dropDownItem.style.display = 'none';
 		}
@@ -83,24 +81,35 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 
 	// Displaying and hiding of the dropdown menu
 	menuDisplayItem.addEventListener('mouseenter', () => {
-		dropDownElement.childNodes.forEach((node) => {
+		const nodes = dropDownElement.childNodes;
+		for (let i = 0; i < nodes.length; i++) {
+			const node = nodes[i];
+
+			const paddingTop = window.getComputedStyle(node.parentNode, null).getPropertyValue('padding-top');
+			const borderTop = window.getComputedStyle(node.parentNode, null).getPropertyValue('border-top-width');
+			const paddingLeft = window.getComputedStyle(node.parentNode, null).getPropertyValue('padding-left');
+			const borderLeft = window.getComputedStyle(node.parentNode, null).getPropertyValue('border-left-width');
+
+			const offsetTop = parseInt(paddingTop.split('px')[0], 10) + parseInt(borderTop.split('px')[0], 10);
+			const offsetLeft = parseInt(paddingLeft.split('px')[0], 10) + parseInt(borderLeft.split('px')[0], 10);
+
 			if (!node.classList.contains(`${this.title}-item-display`)) {
-				// eslint-disable-next-line no-param-reassign
+				node.style.transform = `translate(${offsetLeft}px, calc(${(i)*100}% + ${offsetTop}px))`;
+				node.style.width = `${menuDisplayItem.offsetWidth}px`;
 				node.style.opacity = '1';
-				// eslint-disable-next-line no-param-reassign
 				node.style.display = 'inline';
 			}
-		});
+		}
 	});
 	dropDownElement.addEventListener('mouseleave', () => {
-		dropDownElement.childNodes.forEach((node) => {
+		const nodes = dropDownElement.childNodes;
+		for (let i = 0; i < nodes.length; i++) {
+			const node = nodes[i];
 			if (!node.classList.contains(`${this.title}-item-display`)) {
-				// eslint-disable-next-line no-param-reassign
 				node.style.opacity = '0';
-				// eslint-disable-next-line no-param-reassign
 				node.style.display = 'none';
 			}
-		});
+		}
 	});
 
 	return dropDownElement;

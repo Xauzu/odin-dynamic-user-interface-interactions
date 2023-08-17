@@ -12,11 +12,11 @@ const test = () => {
 
     dDown.addItem(new DropDownItem('test', ()=>{window.open('https://github.com', '_self')}))
 
-    content.appendChild(dDown.createElement(false, true));
+    content.appendChild(dDown.createElement(false));
 
 
     const dDown2 = new DropDown('mobile-menu', new DropDownItem('test', ()=> {window.open('https://google.com', '_self')}), testItem, 'test3');
-    content.appendChild(dDown2.createElement(false, false));
+    content.appendChild(dDown2.createElement(false));
 
     // Scale apply on dropdown object
     // font size, padding, and others apply on [class^="<name of dropdown>-item"]

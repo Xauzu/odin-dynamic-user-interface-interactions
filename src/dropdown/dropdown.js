@@ -59,21 +59,20 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 	);
 	dropDownElement.appendChild(menuDisplayItem);
 
-	
 	for (let i = 0; i < this.items.length; i++) {
 		const dropDownItem = createItem(
 			'button',
 			this.items[i],
 			`${this.title}-item-${this.items[i].text || this.items[i]}`,
 			i,
-			false
+			false,
 		);
 
 		// Styling to create a dropdown
 		if (disableStyle !== true) {
 			dropDownItem.style.position = 'absolute';
 			dropDownItem.style.zIndex = '10';
-            dropDownItem.style.display = 'none';
+			dropDownItem.style.display = 'none';
 		}
 
 		dropDownElement.appendChild(dropDownItem);
@@ -85,16 +84,30 @@ dropdown.prototype.createElement = function createElement(disableStyle) {
 		for (let i = 0; i < nodes.length; i++) {
 			const node = nodes[i];
 
-			const paddingTop = window.getComputedStyle(node.parentNode, null).getPropertyValue('padding-top');
-			const borderTop = window.getComputedStyle(node.parentNode, null).getPropertyValue('border-top-width');
-			const paddingLeft = window.getComputedStyle(node.parentNode, null).getPropertyValue('padding-left');
-			const borderLeft = window.getComputedStyle(node.parentNode, null).getPropertyValue('border-left-width');
+			const paddingTop = window
+				.getComputedStyle(node.parentNode, null)
+				.getPropertyValue('padding-top');
+			const borderTop = window
+				.getComputedStyle(node.parentNode, null)
+				.getPropertyValue('border-top-width');
+			const paddingLeft = window
+				.getComputedStyle(node.parentNode, null)
+				.getPropertyValue('padding-left');
+			const borderLeft = window
+				.getComputedStyle(node.parentNode, null)
+				.getPropertyValue('border-left-width');
 
-			const offsetTop = parseInt(paddingTop.split('px')[0], 10) + parseInt(borderTop.split('px')[0], 10);
-			const offsetLeft = parseInt(paddingLeft.split('px')[0], 10) + parseInt(borderLeft.split('px')[0], 10);
+			const offsetTop =
+				parseInt(paddingTop.split('px')[0], 10) +
+				parseInt(borderTop.split('px')[0], 10);
+			const offsetLeft =
+				parseInt(paddingLeft.split('px')[0], 10) +
+				parseInt(borderLeft.split('px')[0], 10);
 
 			if (!node.classList.contains(`${this.title}-item-display`)) {
-				node.style.transform = `translate(${offsetLeft}px, calc(${(i)*100}% + ${offsetTop}px))`;
+				node.style.transform = `translate(${offsetLeft}px, calc(${
+					i * 100
+				}% + ${offsetTop}px))`;
 				node.style.width = `${menuDisplayItem.offsetWidth}px`;
 				node.style.opacity = '1';
 				node.style.display = 'inline';

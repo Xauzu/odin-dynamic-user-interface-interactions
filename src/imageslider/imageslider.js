@@ -137,7 +137,7 @@ function createNav(slider, items, disableStyle) {
 
 	if (disableStyle !== true) {
 		navDiv.style.position = 'absolute';
-		navDiv.style.bottom = '0px';
+		navDiv.style.bottom = '2vw';
 		navDiv.style.display = 'grid';
 		navDiv.style.gridTemplateColumns = 'repeat(auto-fit, 1fr)';
 		navDiv.style.opacity = '0';
@@ -165,10 +165,9 @@ function createNav(slider, items, disableStyle) {
 // Create a dom element for the imageslider
 imageslider.prototype.createElement = function createElement(disableStyle) {
 	const imagesliderElement = document.createElement('div');
+	imagesliderElement.classList.add(`${this.title}-slider`);
+	
 	if (disableStyle !== true) {
-		// Temp
-		imagesliderElement.style.backgroundColor = 'grey';
-
 		imagesliderElement.style.position = 'relative';
 		imagesliderElement.style.display = 'grid';
 		imagesliderElement.style.gridTemplate = '1fr / 1fr';

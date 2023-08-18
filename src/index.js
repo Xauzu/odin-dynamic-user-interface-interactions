@@ -1,5 +1,6 @@
 import {dropdown as DropDown, dropdownItem as DropDownItem} from "./dropdown/dropdown";
 import {imageslider as ImageSlider, imagesliderItem as SliderItem} from "./imageslider/imageslider";
+import testImg from './imageslider/test.png';
 
 import './style.css'
 
@@ -21,7 +22,10 @@ const test = () => {
     // Scale apply on dropdown object
     // font size, padding, and others apply on [class^="<name of dropdown>-item"]
 
-    const slider = new ImageSlider('main', new SliderItem(null, 'none', ()=> {window.open('https://google.com', '_self')}));
+    // const slider = new ImageSlider('main', new SliderItem(null, 'none', ()=> {window.open('https://google.com', '_self')}));
+    const slider = new ImageSlider('main', new SliderItem(null, 'none', null));
+    slider.addItem(new SliderItem(testImg, '', null))
+    slider.addItem(new SliderItem(null, '', null))
     content.appendChild(slider.createElement(false));
 };
 

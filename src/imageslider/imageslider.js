@@ -7,23 +7,30 @@ export function imageslider(title, ...args) {
 	args.forEach((a) => {
 		this.items.push(a);
 	});
+	this.currentIndex = 0;
+	this.left = function left() {
+		if (this.items.length > 0) {
+			this.currentIndex += 1;
+
+			if (this.currentIndex > this.items.length - 1) this.currentIndex = 0;
+			// todo
+		}
+	}
 }
 
 // Imageslider item object
 export function imagesliderItem(src, alt, callback) {
-	this.src = src;
+	this.src = src || img;
 	this.alt = alt;
 	this.callback = callback;
 }
 
 // Create a dom element for the dropdown item using the data from the object
-function createItem(sliderItem, classlist, index, visible, disableStyle) {
+function createItem(slider, sliderItem, classlist, index, visible, disableStyle) {
 	const item = document.createElement('img');
-	item.classList.add(`${sliderItem.title}-slider`);
 
 	if (disableStyle !== true) {
-		item.style.width = '100%';
-		item.style.height = '100%';
+		item.style.width = `100%`;
 	}
 
 	// Determine based on if a dropdownitem or string was used
@@ -49,12 +56,16 @@ function createItem(sliderItem, classlist, index, visible, disableStyle) {
 function createItems(slider, title, items, disableStyle) {
 	for (let i = 0; i < items.length; i++) {
 		const item = createItem(
-			items[0],
-			`slider-${title}-${i}`,
+			slider,
+			items[i],
+			`slider-${title}-item-${i}`,
 			i,
 			i === 0,
 			disableStyle,
 		);
+		item.style.flex = '1 100%';
+		item.style.width = '100%';
+
 		slider.appendChild(item);
 	}
 }
@@ -139,7 +150,7 @@ function createNav(slider, items, disableStyle) {
 		navDiv.style.position = 'absolute';
 		navDiv.style.bottom = '2vw';
 		navDiv.style.display = 'grid';
-		navDiv.style.gridTemplateColumns = 'repeat(auto-fit, 1fr)';
+		navDiv.style.gridTemplateColumns = `repeat(${items.length+2}, 1fr)`;
 		navDiv.style.opacity = '0';
 		navDiv.style.transition = 'opacity 0.5s';
 	}
@@ -162,11 +173,24 @@ function createNav(slider, items, disableStyle) {
 	return navDiv;
 }
 
+function createImageContainer(title, items) {
+	const imageElement = document.createElement('div');
+	imageElement.classList.add(`${title}-slider-imagecontainer`);
+	imageElement.style.display = 'flex';
+	imageElement.style.alignItems = 'center';
+	imageElement.style.justifyItems = 'center';
+	imageElement.style.overflow = 'hidden';
+
+	createItems(imageElement, title, items);
+
+	return imageElement;
+}
+
 // Create a dom element for the imageslider
 imageslider.prototype.createElement = function createElement(disableStyle) {
 	const imagesliderElement = document.createElement('div');
 	imagesliderElement.classList.add(`${this.title}-slider`);
-	
+
 	if (disableStyle !== true) {
 		imagesliderElement.style.position = 'relative';
 		imagesliderElement.style.display = 'grid';
@@ -176,7 +200,9 @@ imageslider.prototype.createElement = function createElement(disableStyle) {
 		imagesliderElement.style.overflow = 'auto';
 	}
 
-	createItems(imagesliderElement, this.title, this.items);
+	const imageElement = createImageContainer(this.title, this.items);
+	imagesliderElement.appendChild(imageElement);
+
 
 	imagesliderElement.appendChild(
 		createButton(imagesliderElement, 'left', '<'),
@@ -190,4 +216,11 @@ imageslider.prototype.createElement = function createElement(disableStyle) {
 	);
 
 	return imagesliderElement;
+};
+
+imageslider.prototype.addItem = function addItem(item) {
+	this.items.push(item);
+}
+imageslider.prototype.removeItem = function removeItem(index) {
+	this.items.splice(index, 1);
 };

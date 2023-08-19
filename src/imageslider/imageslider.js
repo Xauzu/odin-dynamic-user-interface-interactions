@@ -59,6 +59,14 @@ function createItems(slider, title, items, disableStyle) {
 		item.style.width = '100%';
 
 		slider.appendChild(item);
+
+		if (i === 0) {
+			item.onload = () => {
+				const frame = document.querySelector(`.${title}-slider-imagecontainer`);
+				frame.style.maxWidth = `${item.clientWidth}px`;
+				frame.style.maxHeight = `${item.clientHeight}px`;
+			}
+		}
 	}
 
 	return items.length;

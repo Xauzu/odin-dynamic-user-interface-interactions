@@ -33,6 +33,7 @@ function createItem(slider, sliderItem, classlist, index, visible, disableStyle)
 			item.addEventListener('click', () => {
 				sliderItem.callback();
 			});
+			item.style.cursor = 'pointer';
 	} else {
 		item.src = img;
 		item.alt = 'No image found';
@@ -208,7 +209,7 @@ function createImageContainer(title, items) {
 	imageElement.style.justifyItems = 'center';
 	imageElement.style.overflowX = 'auto';
 	imageElement.style.position = 'relative';
-	imageElement.style.scrollBehavior = '[ auto | smooth ]';
+	imageElement.style.scrollBehavior = 'smooth';
 
 	const count = createItems(imageElement, title, items);
 

@@ -7,15 +7,6 @@ export function imageslider(title, ...args) {
 	args.forEach((a) => {
 		this.items.push(a);
 	});
-	this.currentIndex = 0;
-	this.left = function left() {
-		if (this.items.length > 0) {
-			this.currentIndex += 1;
-
-			if (this.currentIndex > this.items.length - 1) this.currentIndex = 0;
-			// todo
-		}
-	}
 }
 
 // Imageslider item object
@@ -60,7 +51,7 @@ function createItems(slider, title, items, disableStyle) {
 			items[i],
 			`slider-${title}-item-${i}`,
 			i,
-			i === 0,
+			true,
 			disableStyle,
 		);
 		item.style.flex = '1 100%';
@@ -68,12 +59,27 @@ function createItems(slider, title, items, disableStyle) {
 
 		slider.appendChild(item);
 	}
+
+	return items.length;
+}
+
+function scrollContainer(imagecontainer, change) {
+	let current = +imagecontainer.getAttribute('data-currentID');
+	const size = +imagecontainer.getAttribute('data-size');
+	const title = imagecontainer.getAttribute('data-parent');
+
+	current = (current + change) % size;
+	if (current < 0) current = size + current;
+
+	const xPos = document.querySelector(`.slider-${title}-item-${current}`).offsetLeft;
+	imagecontainer.scroll(xPos, 0);
+	imagecontainer.setAttribute('data-currentID', current);
 }
 
 // Position being left or right
-function createButton(slider, position, text, disableStyle) {
+function createButton(slider, title, position, text, disableStyle) {
 	const newButton = document.createElement('button');
-	newButton.classList.add(`${slider.title}-slider-${position}button`);
+	newButton.classList.add(`${title}-slider-${position}button`);
 
 	if (disableStyle !== true) {
 		newButton.style.position = 'absolute';
@@ -112,14 +118,23 @@ function createButton(slider, position, text, disableStyle) {
 		newButton.style.opacity = 0;
 	});
 
+	newButton.addEventListener('click', ()=> {
+		let change = 0;
+		if (position === 'left') change = -1;
+		else if (position === 'right') change = 1;
+
+		const imagecontainer = document.querySelector(`.${title}-slider-imagecontainer`);
+		scrollContainer(imagecontainer, change);
+	});
+
 	newButton.textContent = text;
 
 	return newButton;
 }
 
-function createNavButton(slider, id, disableStyle) {
+function createNavButton(slider, title, id, disableStyle) {
 	const navButton = document.createElement('button');
-	navButton.classList.add(`${slider.title}-slider-nav-${id}`);
+	navButton.id = `${title}-slider-nav-${id}`;
 
 	if (disableStyle !== true) {
 		navButton.style.borderRadius = '50%';
@@ -139,10 +154,19 @@ function createNavButton(slider, id, disableStyle) {
 		navButton.style.padding = `${padding}px`;
 	});
 
+	navButton.addEventListener('click', ()=> {
+		const xPos = document.querySelector(`.slider-${title}-item-${id}`).offsetLeft;
+		const imagecontainer = document.querySelector(`.${title}-slider-imagecontainer`);
+
+		imagecontainer.scroll(xPos, 0);
+		imagecontainer.setAttribute('data-currentID', +id);
+		
+	});
+
 	return navButton;
 }
 
-function createNav(slider, items, disableStyle) {
+function createNav(slider, title, items, disableStyle) {
 	const navDiv = document.createElement('div');
 	navDiv.classList.add(`${slider.title}-slider-nav`);
 
@@ -152,6 +176,7 @@ function createNav(slider, items, disableStyle) {
 		navDiv.style.display = 'grid';
 		navDiv.style.gridTemplateColumns = `repeat(${items.length+2}, 1fr)`;
 		navDiv.style.opacity = '0';
+		navDiv.style.gap = '2vw';
 		navDiv.style.transition = 'opacity 0.5s';
 	}
 
@@ -159,8 +184,10 @@ function createNav(slider, items, disableStyle) {
 	for (let i = 0; i < count + 2; i++) {
 		if (i === 0 || i === count + 1) {
 			navDiv.appendChild(document.createElement('div'));
-			navDiv.classList.add(`${slider.title}-slider-nav-spacing`);
-		} else navDiv.appendChild(createNavButton(slider, i - 1, disableStyle));
+			navDiv.classList.add(`${title}-slider-nav-spacing`);
+		} else {
+			navDiv.appendChild(createNavButton(slider, title, i - 1, disableStyle));
+		}
 	}
 
 	slider.addEventListener('mouseenter', () => {
@@ -179,15 +206,23 @@ function createImageContainer(title, items) {
 	imageElement.style.display = 'flex';
 	imageElement.style.alignItems = 'center';
 	imageElement.style.justifyItems = 'center';
-	imageElement.style.overflow = 'hidden';
+	imageElement.style.overflowX = 'auto';
+	imageElement.style.position = 'relative';
+	imageElement.style.scrollBehavior = '[ auto | smooth ]';
 
-	createItems(imageElement, title, items);
+	const count = createItems(imageElement, title, items);
+
+	// data holder of ID of current scrolled item
+	imageElement.setAttribute('data-parent', title);
+	imageElement.setAttribute('data-currentID', 0);
+	imageElement.setAttribute('data-size', count);
+
 
 	return imageElement;
 }
 
 // Create a dom element for the imageslider
-imageslider.prototype.createElement = function createElement(disableStyle) {
+imageslider.prototype.createElement = function createElement(enableAutoScroll, disableStyle) {
 	const imagesliderElement = document.createElement('div');
 	imagesliderElement.classList.add(`${this.title}-slider`);
 
@@ -197,7 +232,6 @@ imageslider.prototype.createElement = function createElement(disableStyle) {
 		imagesliderElement.style.gridTemplate = '1fr / 1fr';
 		imagesliderElement.style.alignItems = 'center';
 		imagesliderElement.style.justifyItems = 'center';
-		imagesliderElement.style.overflow = 'auto';
 	}
 
 	const imageElement = createImageContainer(this.title, this.items);
@@ -205,15 +239,21 @@ imageslider.prototype.createElement = function createElement(disableStyle) {
 
 
 	imagesliderElement.appendChild(
-		createButton(imagesliderElement, 'left', '<'),
+		createButton(imagesliderElement, this.title, 'left', '<'),
 	);
 	imagesliderElement.appendChild(
-		createButton(imagesliderElement, 'right', '>'),
+		createButton(imagesliderElement, this.title, 'right', '>'),
 	);
 
 	imagesliderElement.appendChild(
-		createNav(imagesliderElement, this.items, disableStyle),
+		createNav(imagesliderElement, this.title, this.items, disableStyle),
 	);
+
+	if (enableAutoScroll) {
+		window.setInterval(() => {
+			scrollContainer(imageElement, 1);
+		}, 5000);
+	}
 
 	return imagesliderElement;
 };

@@ -23,10 +23,10 @@ const test = () => {
     // font size, padding, and others apply on [class^="<name of dropdown>-item"]
 
     // const slider = new ImageSlider('main', new SliderItem(null, 'none', ()=> {window.open('https://google.com', '_self')}));
-    const slider = new ImageSlider('main', new SliderItem(null, 'none', null));
-    slider.addItem(new SliderItem(testImg, '', null))
-    slider.addItem(new SliderItem(null, '', null))
-    content.appendChild(slider.createElement(false));
+    const slider = new ImageSlider('main', new SliderItem(null, 'none', ()=> {window.open('https://thenounproject.com/icon/image-2059648/', '_self')}));
+    slider.addItem(new SliderItem(testImg, '', ()=> {window.open('https://thenounproject.com/icon/pizza-5976864/', '_self')}))
+    slider.addItem(new SliderItem(null, '', ()=> {window.open('https://thenounproject.com/icon/image-2059648/', '_self')}))
+    content.appendChild(slider.createElement(true, false));
 };
 
 test();

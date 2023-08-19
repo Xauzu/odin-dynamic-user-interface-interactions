@@ -16,3 +16,14 @@
 .main-slider {
     background-color: lightgrey;
 }
+
+/* Hide Scrollbar for Chrome */
+.main-slider-imagecontainer::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide Scrollbar for Edge and Firefox */
+.main-slider-imagecontainer {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
